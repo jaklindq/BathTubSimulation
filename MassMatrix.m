@@ -13,7 +13,9 @@ end
 
 function dM = ElemMassMatrix(p,t,el)
 NodeCoords = p(:, t(1:3, el));
-dx = ElemArea(NodeCoords);               % element area
-dM = 1/4 * dx;
+
+dx = ElemArea(NodeCoords);
+% Using an approximation of the sum of the function value mid points of the side
+dM = 1/4* dx; 
 end
 
