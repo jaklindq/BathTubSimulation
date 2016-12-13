@@ -135,22 +135,41 @@ function G = BounVector(p, e, g)
 
 %------------------------------------------------------------------------------------
 %
-% INCOMPLETE: ElemBounMatrix, ElemLoadVector and ElemBounVector are missing!
+% INCOMPLETE: ElemBounMatrix, ElemLoadVector and ElemBounVector
 %
 %------------------------------------------------------------------------------------
 
 % Elementmatrix/vector function
-
+%phi*phi = {0,1/4}. gradphi*gradphi = {C1*C2,0} (I think)
+% Don't the integral for every base, but do it for every element instead and superposition the contributions.
 function dD = ElemDiffMatrix(p, t, d, el)
 
-% returns the element diffusion matrix dD for element number
-% el defined by t(1:4, el) and p(t(1:3, el).
+    % returns the element diffusion matrix dD for element number
+    % el defined by t(1:4, el) and p(t(1:3, el).
 
-  NodeCoords = p(:, t(1:3, el));
-  d = sum(d(t(1:3, el)))/3;
-  Dphi = ElementPhiGradients(NodeCoords);
-  dx = area(NodeCoords);               % element area
-  dD = d * Dphi' * Dphi * dx;
+      NodeCoords = p(:, t(1:3, el));
+      d = sum(d(t(1:3, el)))/3;
+      Dphi = ElementPhiGradients(NodeCoords);
+      dx = area(NodeCoords);               % element area
+      dD = d * Dphi' * Dphi * dx;
+
+      
+function dF = ElemLoadVector(p, t, f,el)
+
+    %returns the element load vector dF for element number el
+    % Approximated with the value at triangle center.
+    NodeCoords = p(:, t(1:3, el));
+    TriCenter = [NodeCoords(:,1)+NodeCoords(:,2), NodeCoords(:,1)+NodeCoords(:,3), NodeCoords(:,2)+NodeCoords(:,3)] / 2;
+    elArea = area(NodeCoords);
+    dF = elArea * f(TriCenter);
+    
+function dB = ElemBounMatrix(p, t, b, el)
+
+
+
+function dG = ElemBounVector(p, e, g, el)
+
+
 
 function Dphi = ElementPhiGradients(Nodes)
 
