@@ -1,14 +1,26 @@
-function [xi0] = InitialXi(u0i,v0i,Minv,S,f0i,dt)
-
+function [xi0] = InitialXi(Minv,S,p,dt)
+xi0 = zeros(size(p,2),1);
 % Generating the first two vectors of the xi matrix. Which are needed for
 % the recursive temporal evolution of xi(t).
 % The entries are: xi(1) = xi(t_-1) = u_0(:,x_i) and xi(:,2) = xi_0
 
-a0i = Minv(f0i -S*u0i);
+f0 = SourceFunction(p,0);
 
-xi0(:,1) = u0i - dt*v0i + dt^2/2*a0i;
+[u0,v0] = InitialConditions(p);
 
-xi0(:,2) = u0i;
+a0 = Minv*(f0 -S*u0);
+
+
+xi0(:,1) = u0 - dt*v0 + dt^2/2*a0;
+
+xi0(:,2) = u0;
 
 end
 
+function [u0,v0] = InitialConditions(x)
+
+u0 = cos( 5*pi*sqrt( sum(x.^2,1) ) ) ./ ( 1 + 10* sqrt( sum(x.^2,1) ) );
+v0 = zeros(size(u0));
+u0 = u0';
+v0 = v0';
+end
