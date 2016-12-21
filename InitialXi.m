@@ -17,8 +17,8 @@ xi0(:,2) = u0;
 end
 
 function [u0,v0] = InitialConditions(x)
-u0 = cos( 5*pi*sqrt( sum(x.^2,1) ) ) ./ ( 1 + 10* sqrt( sum(x.^2,1) ) ); %PART I
-% u0 = zeros(1,size(x,2)); %PART II
+u0 = cos( 5*pi*sqrt( sum(x.^2,1) ) ) ./ ( 1 + 10* sqrt( sum(x.^2,1) ) ); %BASIC
+% u0 = zeros(1,size(x,2)); %EXTRA
 v0 = zeros(size(u0));
 u0 = u0';
 v0 = v0';
